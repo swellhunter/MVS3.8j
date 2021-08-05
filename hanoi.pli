@@ -1,12 +1,3 @@
-//HERCMMPH JOB (PL1),'PL1 Hanoi',CLASS=A,MSGCLASS=C,
-//             REGION=8M,TIME=5,MSGLEVEL=(2,1),NOTIFY=HERCMM
-//********************************************************************
-//* Name: HERCMM.PDS.PL1(HANOI)
-//* Desc: Towers of Hanoi adapted from IronSpring PL/I demo program.
-//********************************************************************
-//PROGPL1   EXEC PL1LFCG,PARM.PL1L='LOAD,NODECK,OPT=02,NEST'
-//PL1L.SYSLIN DD UNIT=SYSDA
-//PL1L.SYSIN  DD *
  /* HANOI                                                 */
  /*********************************************************/
  /*                                                       */
@@ -46,6 +37,3 @@
     END MOVE_DISK;
 
  END HANOI;
-/*
-//GO.SYSPRINT DD SYSOUT=*,DCB=(RECFM=FBA,LRECL=133,BLKSIZE=26600)
-//GO.SYSIN    DD DUMMY
