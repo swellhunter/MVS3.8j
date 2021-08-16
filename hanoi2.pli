@@ -44,14 +44,14 @@
        DECLARE(DISK_Q, FROM, TO, WORK) FIXED BINARY(31);
 
        CALL_Q = CALL_Q + 1;
-       DEPTH = DEPTH + 1;
+       DEPTH  = DEPTH  + 1;
        IF DISK_Q > 0 THEN
           DO;
              CALL DO_HANOI((DISK_Q - 1), FROM, WORK, TO);
              CALL MOVE_DISK(FROM, TO);
              CALL DO_HANOI((DISK_Q - 1), WORK, TO, FROM);
           END;
-       DEPTH = DEPTH - 1;
+       DEPTH = DEPTH  - 1;
     END DO_HANOI;
 
  /*********************************************************/
@@ -69,7 +69,7 @@
        DECLARE DEPTH_FMTD              PIC '9';
        DECLARE TEMP                    CHAR(1);
        FROM_FMTD = FROM; TO_FMTD = TO; DEPTH_FMTD = DEPTH;
-       /* GRAPHICS */
+       /* GRAPHICS, there is no SELECT..WHEN..OTHERWISE in (F) */
        IF FROM = 1 THEN
           DO;
              TEMP = SUBSTR(PILE1,10 - HEIGHT1,1);
@@ -144,16 +144,17 @@
          LIST ((15)' '||'T O W E R S  O F  H A N O I');
        PUT SKIP FILE(SYSPRINT) LIST (' ');
        PUT SKIP FILE(SYSPRINT)
-         LIST((22)' '||'(1)'||(10)' '||'(2)'||(10)' '||'(3)');
-
+         LIST('SL'||(22)' '||
+             '(1)'||(10)' '||'(2)'||(10)' '||'(3)');
 
        GRPH = PILE1||'#   '||PILE2||'#   '||PILE3||'#';
-       PUT SKIP FILE(SYSPRINT) LIST((19)' '||GRPH);
+       PUT SKIP FILE(SYSPRINT) LIST((9)' '||'*'||(9)' '||GRPH);
 
     END INIT_STATE;
 
  /*********************************************************/
- /* Validate the PARM, it should be in {"/3","/4",..,"/9"}
+ /* Validate the PARM, and default value to 3 if bad.     */
+ /* JCL should have passed value in {"/3","/4",..,"/9"}.  */
  /*********************************************************/
     VALIDATE: PROCEDURE;
 
