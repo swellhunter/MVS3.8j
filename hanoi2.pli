@@ -154,7 +154,8 @@
 
  /*********************************************************/
  /* Validate the PARM, and default value to 3 if bad.     */
- /* JCL should have passed value in {"/3","/4",..,"/9"}.  */
+ /* EXEC should have passed value in {"3","4",..,"9"}.    */
+ /* A GO.PARM requires a delimiting slash as well "/3"    */
  /*********************************************************/
     VALIDATE: PROCEDURE;
 
