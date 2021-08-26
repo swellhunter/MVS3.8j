@@ -6,53 +6,53 @@
  /*                                                       */
  /* FUNCTION: 'TOWERS OF HANOI' PROBLEM.                  */
  /*                                                       */
- /* USAGE:    HANOI  PARM='/n' where n from 3-9.          */
+ /* USAGE:    HANOI  PARM='n' where n is from 3-9.        */
  /*                                                       */
  /* DEPENDENCIES:                                         */
  /*           NONE                                        */
  /*                                                       */
  /*********************************************************/
  HANOI: PROCEDURE(PARM) OPTIONS(MAIN);
-    DECLARE PARM                       CHARACTER(100) VAR;
+   DECLARE PARM                       CHARACTER(100) VAR;
 
-    DECLARE (DISK_Q, FROM, TO, WORK)   FIXED BINARY(31);
-    DECLARE MOVE_Q                     FIXED BINARY(31);
-    DECLARE DEPTH                      FIXED DEC(5,0)   INIT(0);
-    DECLARE CALL_Q                     FIXED BINARY(31);
-    DECLARE GRPH                       CHARACTER(40)    INIT(' ');
-    DECLARE PILE1                      CHARACTER(9)     INIT((9)'-');
-    DECLARE PILE2                      CHARACTER(9)     INIT((9)'-');
-    DECLARE PILE3                      CHARACTER(9)     INIT((9)'-');
-    DECLARE HEIGHT1                    FIXED BINARY(31) INIT(0);
-    DECLARE HEIGHT2                    FIXED BINARY(31) INIT(0);
-    DECLARE HEIGHT3                    FIXED BINARY(31) INIT(0);
-    DECLARE BAD_PARM                   BIT(1)           INIT('0'B);
-    DECLARE YES                        BIT(1)           INIT('1'B);
+   DECLARE (DISK_Q, FROM, TO, WORK)   FIXED BINARY(31);
+   DECLARE MOVE_Q                     FIXED BINARY(31);
+   DECLARE DEPTH                      FIXED DEC(5,0)   INIT(0);
+   DECLARE CALL_Q                     FIXED BINARY(31);
+   DECLARE GRPH                       CHARACTER(40)    INIT(' ');
+   DECLARE PILE1                      CHARACTER(9)     INIT((9)'-');
+   DECLARE PILE2                      CHARACTER(9)     INIT((9)'-');
+   DECLARE PILE3                      CHARACTER(9)     INIT((9)'-');
+   DECLARE HEIGHT1                    FIXED BINARY(31) INIT(0);
+   DECLARE HEIGHT2                    FIXED BINARY(31) INIT(0);
+   DECLARE HEIGHT3                    FIXED BINARY(31) INIT(0);
+   DECLARE BAD_PARM                   BIT(1)           INIT('0'B);
+   DECLARE YES                        BIT(1)           INIT('1'B);
 
  /*********************************************************/
  /* Nucleus                                               */
  /*********************************************************/
-    CALL VALIDATE;
-    CALL INIT_STATE;
-    CALL DO_HANOI(DISK_Q, FROM, TO, WORK);
-    CALL STATISTICS;
+   CALL VALIDATE;
+   CALL INIT_STATE;
+   CALL DO_HANOI(DISK_Q, FROM, TO, WORK);
+   CALL STATISTICS;
 
  /*********************************************************/
  /* DO_HANOI : a recursive function.                      */
  /*********************************************************/
-    DO_HANOI: PROCEDURE(DISK_Q, FROM, TO, WORK) RECURSIVE;
-       DECLARE(DISK_Q, FROM, TO, WORK) FIXED BINARY(31);
+   DO_HANOI: PROCEDURE(DISK_Q, FROM, TO, WORK) RECURSIVE;
+      DECLARE(DISK_Q, FROM, TO, WORK) FIXED BINARY(31);
 
-       CALL_Q = CALL_Q + 1;
-       DEPTH  = DEPTH  + 1;
-       IF DISK_Q > 0 THEN
-          DO;
-             CALL DO_HANOI((DISK_Q - 1), FROM, WORK, TO);
-             CALL MOVE_DISK(FROM, TO);
-             CALL DO_HANOI((DISK_Q - 1), WORK, TO, FROM);
-          END;
-       DEPTH = DEPTH  - 1;
-    END DO_HANOI;
+      CALL_Q = CALL_Q + 1;
+      DEPTH  = DEPTH  + 1;
+      IF DISK_Q > 0 THEN
+         DO;
+            CALL DO_HANOI((DISK_Q - 1), FROM, WORK, TO);
+            CALL MOVE_DISK(FROM, TO);
+            CALL DO_HANOI((DISK_Q - 1), WORK, TO, FROM);
+         END;
+      DEPTH = DEPTH  - 1;
+   END DO_HANOI;
 
  /*********************************************************/
  /* Procedure MOVE_DISK                                   */
@@ -63,59 +63,59 @@
  /* the actual digits.  123456789#                        */
  /* i.e. push(TO, pop(FROM))                              */
  /*********************************************************/
-    MOVE_DISK: PROCEDURE(FROM, TO);
-       DECLARE (FROM, TO)              FIXED BINARY(31);
-       DECLARE (FROM_FMTD, TO_FMTD)    PIC '9';
-       DECLARE DEPTH_FMTD              PIC '9';
-       DECLARE TEMP                    CHAR(1);
-       FROM_FMTD = FROM; TO_FMTD = TO; DEPTH_FMTD = DEPTH;
-       /* GRAPHICS, there is no SELECT..WHEN..OTHERWISE in (F) */
-       IF FROM = 1 THEN
-          DO;
-             TEMP = SUBSTR(PILE1,10 - HEIGHT1,1);
-             SUBSTR(PILE1,10 - HEIGHT1,1) = '-';
-             HEIGHT1 = HEIGHT1 - 1;
-          END;
-       ELSE
-          IF FROM = 2 THEN
-             DO;
-                TEMP = SUBSTR(PILE2,10 - HEIGHT2,1);
-                SUBSTR(PILE2,10 - HEIGHT2,1) = '-';
-                HEIGHT2 = HEIGHT2 - 1;
-             END;
-          ELSE /* 3 */
-             DO;
-                TEMP = SUBSTR(PILE3,10 - HEIGHT3,1);
-                SUBSTR(PILE3,10 - HEIGHT3,1) = '-';
-                HEIGHT3 = HEIGHT3 - 1;
-             END;
+   MOVE_DISK: PROCEDURE(FROM, TO);
+      DECLARE (FROM, TO)              FIXED BINARY(31);
+      DECLARE (FROM_FMTD, TO_FMTD)    PIC '9';
+      DECLARE DEPTH_FMTD              PIC '9';
+      DECLARE TEMP                    CHAR(1);
+      FROM_FMTD = FROM; TO_FMTD = TO; DEPTH_FMTD = DEPTH;
+      /* GRAPHICS, there is no SELECT..WHEN..OTHERWISE in (F) */
+      IF FROM = 1 THEN
+         DO;
+            TEMP = SUBSTR(PILE1,10 - HEIGHT1,1);
+            SUBSTR(PILE1,10 - HEIGHT1,1) = '-';
+            HEIGHT1 = HEIGHT1 - 1;
+         END;
+      ELSE
+         IF FROM = 2 THEN
+            DO;
+               TEMP = SUBSTR(PILE2,10 - HEIGHT2,1);
+               SUBSTR(PILE2,10 - HEIGHT2,1) = '-';
+               HEIGHT2 = HEIGHT2 - 1;
+            END;
+         ELSE /* 3 */
+            DO;
+               TEMP = SUBSTR(PILE3,10 - HEIGHT3,1);
+               SUBSTR(PILE3,10 - HEIGHT3,1) = '-';
+               HEIGHT3 = HEIGHT3 - 1;
+            END;
 
-       IF TO = 3 THEN
-          DO;
-             SUBSTR(PILE3,9 - HEIGHT3,1) = TEMP;
-             HEIGHT3 = HEIGHT3 + 1;
-          END;
-       ELSE
-          IF TO = 2 THEN
-             DO;
-                SUBSTR(PILE2,9 - HEIGHT2,1) = TEMP;
-                HEIGHT2 = HEIGHT2 + 1;
-             END;
-          ELSE /* 1 */
-             DO;
-                SUBSTR(PILE1,9 - HEIGHT1,1) = TEMP;
-                HEIGHT1 = HEIGHT1 + 1;
-             END;
+      IF TO = 3 THEN
+         DO;
+            SUBSTR(PILE3,9 - HEIGHT3,1) = TEMP;
+            HEIGHT3 = HEIGHT3 + 1;
+         END;
+      ELSE
+         IF TO = 2 THEN
+            DO;
+               SUBSTR(PILE2,9 - HEIGHT2,1) = TEMP;
+               HEIGHT2 = HEIGHT2 + 1;
+            END;
+         ELSE /* 1 */
+            DO;
+               SUBSTR(PILE1,9 - HEIGHT1,1) = TEMP;
+               HEIGHT1 = HEIGHT1 + 1;
+            END;
 
-       GRPH = PILE1||'#   '||PILE2||'#   '||PILE3||'#';
-       PUT SKIP FILE(SYSPRINT)
-        LIST(DEPTH_FMTD||'   MOVE ' || FROM_FMTD
-                       ||   ' -> '  || TO_FMTD
-                       ||   '    '  || GRPH);
+      GRPH = PILE1||'#   '||PILE2||'#   '||PILE3||'#';
+      PUT SKIP FILE(SYSPRINT)
+         LIST(DEPTH_FMTD||'   MOVE ' || FROM_FMTD
+                        ||   ' -> '  || TO_FMTD
+                        ||   '    '  || GRPH);
 
-       MOVE_Q = MOVE_Q + 1;
+      MOVE_Q = MOVE_Q + 1;
 
-    END MOVE_DISK;
+   END MOVE_DISK;
 
  /*********************************************************/
  /* Procedure INIT_STATE                                  */
@@ -124,68 +124,77 @@
  /* enough. Fill string one starting at 10-N for N        */
  /*                                                       */
  /*********************************************************/
-    INIT_STATE: PROCEDURE;
-       DCL I                             FIXED BINARY(31);
-       DCL J                             PIC '9';
-       DCL OFFSET                        FIXED BINARY(31);
+   INIT_STATE: PROCEDURE;
+      DCL I                             FIXED BINARY(31);
+      DCL J                             PIC '9';
+      DCL OFFSET                        FIXED BINARY(31);
+      DCL EDIT_DATE                     CHAR(10);
+      DCL EDIT_TIME                     CHAR(8);
+      DCL DATE                          BUILTIN;
+      DCL TIME                          BUILTIN;
+      DCL TRANSLATE                     BUILTIN;
 
-       FROM = 1; TO = 3; WORK = 2; /* could do upstairs */
+      FROM = 1; TO = 3; WORK = 2; /* could do upstairs */
 
-       OFFSET = 9 - DISK_Q;
-       DO I = 1 TO DISK_Q;
-          J = I;
-          SUBSTR(PILE1,OFFSET + I,1) = J;
-       END;
+      OFFSET = 9 - DISK_Q;
+      DO I = 1 TO DISK_Q;
+         J = I;
+         SUBSTR(PILE1,OFFSET + I,1) = J;
+      END;
 
-       HEIGHT1 = DISK_Q;
+      HEIGHT1 = DISK_Q;
 
-       PUT SKIP FILE(SYSPRINT) LIST (' ');
-       PUT SKIP FILE(SYSPRINT)
+      EDIT_TIME = TRANSLATE('HR:MN:SE',TIME,'HRMNSE');
+      EDIT_DATE = TRANSLATE('DA/MO/20YR',DATE,'YRMODA');
+
+      PUT SKIP FILE(SYSPRINT) LIST(EDIT_DATE||(37)' '||EDIT_TIME);
+      PUT SKIP FILE(SYSPRINT)
          LIST ((15)' '||'T O W E R S  O F  H A N O I');
-       PUT SKIP FILE(SYSPRINT) LIST (' ');
-       PUT SKIP FILE(SYSPRINT)
+      PUT SKIP FILE(SYSPRINT) LIST (' ');
+      PUT SKIP FILE(SYSPRINT)
          LIST('SL'||(22)' '||
              '(1)'||(10)' '||'(2)'||(10)' '||'(3)');
 
-       GRPH = PILE1||'#   '||PILE2||'#   '||PILE3||'#';
-       PUT SKIP FILE(SYSPRINT) LIST((9)' '||'*'||(9)' '||GRPH);
+      GRPH = PILE1||'#   '||PILE2||'#   '||PILE3||'#';
+      PUT SKIP FILE(SYSPRINT) LIST((9)' '||'*'||(9)' '||GRPH);
 
-    END INIT_STATE;
+   END INIT_STATE;
 
  /*********************************************************/
  /* Validate the PARM, and default value to 3 if bad.     */
  /* EXEC should have passed value in {"3","4",..,"9"}.    */
  /* A GO.PARM requires a delimiting slash as well "/3"    */
  /*********************************************************/
-    VALIDATE: PROCEDURE;
+   VALIDATE: PROCEDURE;
 
-       ON CONVERSION
-          BEGIN;
-             ONCHAR   = '3';
-             BAD_PARM = YES;
-          END;
+      ON CONVERSION
+         BEGIN;
+            ONCHAR   = '3';
+            BAD_PARM = YES;
+         END;
 
-       DISK_Q = PARM;
-       ON CONVERSION SYSTEM;
+      DISK_Q = PARM;
+      ON CONVERSION SYSTEM;
 
-       IF DISK_Q < 3 | DISK_Q > 9 THEN
-          DO;
-             DISK_Q   = '3';
-             BAD_PARM = YES;
-          END;
+      IF DISK_Q < 3 | DISK_Q > 9 THEN
+         DO;
+            DISK_Q   = '3';
+            BAD_PARM = YES;
+         END;
 
-    END VALIDATE;
+   END VALIDATE;
 
  /*********************************************************/
  /* Stats - extend to count fcalls ?                      */
  /*********************************************************/
-    STATISTICS: PROCEDURE;
-       PUT SKIP FILE(SYSPRINT) LIST(' ');
-       PUT SKIP FILE(SYSPRINT) LIST(' DISKS : '||DISK_Q);
-       PUT SKIP FILE(SYSPRINT) LIST(' MOVES : '||MOVE_Q);
-       PUT SKIP FILE(SYSPRINT) LIST(' CALLS : '||CALL_Q);
-       IF BAD_PARM THEN
-       PUT SKIP FILE(SYSPRINT) LIST(' * BAD PARAMETER, 3 DEFAULTED *');
-    END STATISTICS;
+   STATISTICS: PROCEDURE;
+      PUT SKIP FILE(SYSPRINT) LIST(' ');
+      PUT SKIP FILE(SYSPRINT) LIST(' DISKS : '||DISK_Q);
+      PUT SKIP FILE(SYSPRINT) LIST(' MOVES : '||MOVE_Q);
+      PUT SKIP FILE(SYSPRINT) LIST(' CALLS : '||CALL_Q);
+      IF BAD_PARM THEN
+         PUT SKIP FILE(SYSPRINT)
+         LIST(' * BAD PARAMETER, DEFAULTED TO 3 DISKS *');
+   END STATISTICS;
 
  END HANOI;
